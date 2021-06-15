@@ -27,4 +27,17 @@ userController.postUser = async(req,res)=>{
     }
 }
 
+userController.getUser = async(req,res)=>{
+    const {username, password} = req.body;
+    const user = await pool.query('SELECT * FROM users WHERE username = $1 AND password = $2',[username, password])
+    if(user.rows.length === 0){
+        res.status(404).send('Failed')
+    }else{
+        res.json({
+            status:200,
+            data: user.rows
+        })
+    }
+}
+
 module.exports = userController;
